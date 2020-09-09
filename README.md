@@ -1,8 +1,10 @@
 # Gold-Mine
 Simple gold-mine game
+
 Link: https://goldmine-django.herokuapp.com/
 
 Login through Gmail account.
+
 10 Clicks per user only.
 
 # Score
