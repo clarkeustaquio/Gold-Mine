@@ -15,12 +15,18 @@ def index(request):
     }
 
     if request.user.is_authenticated:
-        user = MaximumClick.objects.get(user=request.user)
+        try:
+            user_click = MaximumClick.objects.get(user=request.user)
 
-        context['clicks'] = user
-        context['golds'] = user.golds
-        context['diamond'] = user.diamonds
-        context['score'] = user.golds * 2 if user.diamonds else user.golds
+        except MaximumClick.DoesNotExist:
+            user_click = MaximumClick.objects.create(
+                user=request.user
+            )
+
+        context['clicks'] = user_click
+        context['golds'] = user_click.golds
+        context['diamond'] = user_click.diamonds
+        context['score'] = user_click.golds * 2 if user_click.diamonds else user_click.golds
 
     return render(request, 'gold_app/index.html', context)
 
@@ -63,19 +69,35 @@ def user_select(request, id):
     context['golds'] = user_click.golds
     context['diamond'] = user_click.diamonds
     context['click'] = user_click.clicks
-    
-    if user_click.diamonds:
-        score = user_click.golds * 2
-    else:
-        score = user_click.golds
 
-    leader_board = LeaderBoard.objects.update_or_create(
-        user=request.user,
-        score=score,
-    ) 
+    if user_click.clicks == 0:
+        if user_click.diamonds:
+            score = user_click.golds * 2
+        else:
+            score = user_click.golds
 
+        if not LeaderBoard.objects.filter(user=request.user).exists():
+            leader_board = LeaderBoard.objects.create(
+                user=request.user,
+                score=score
+            )
+        else:
+            leader_board = LeaderBoard.objects.get(user=request.user)
+            leader_board.score = score
+            leader_board.save()
+
+    print(score)
     for key, value in request.session.items():
         session_id.append(key)
     context['session'] = session_id
-    
+
     return JsonResponse(context, safe=False, status=200, json_dumps_params={'indent': 4})
+
+def leader_board(request):
+    leader_boards = LeaderBoard.objects.order_by('-score')
+
+    context = {
+        'leader_boards': leader_boards
+    }
+    print(leader_boards)
+    return render(request, 'gold_app/leaderboard.html', context)
