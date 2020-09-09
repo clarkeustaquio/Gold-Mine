@@ -1,0 +1,33 @@
+{% extends 'gold_app/base.html' %}
+
+{% block title %}LeaderBoard{% endblock title %}
+{% block page_header %}
+    <div class="row">
+        <div class="col-md-2">
+            <h5 class="lead"><b>Leaderboard</b></h5>
+        </div>
+    </div>
+{% endblock page_header %}
+{% block content %}
+    <div class="container">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">TOP</th>
+                <th scope="col">USERNAME</th>
+                <th scope="col">SCORES</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for leader_board in leader_boards %}
+                     
+                <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{leader_board.user}}</td>
+                        <td>{{leader_board.score}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+{% endblock content %}

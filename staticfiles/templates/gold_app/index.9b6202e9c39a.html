@@ -1,0 +1,66 @@
+{% extends 'gold_app/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Gold Mine{% endblock title %}
+{% block page_header %}
+    <div class="row">
+        <div class="col-md-2">
+            <h5 class="lead">Golds: <b><span id="golds">{{golds}}</span></b></h5>
+        </div>
+        <div class="col">
+            <h5 class="lead">Diamond: <b><span id="diamond">{{diamond}}</span></b></h5>
+        </div>
+        <div class="col">
+            <h5 class="lead float-right ml-2 mr-3">Score: <b><span id="score">{{score}}</span></b></h5>
+            <h5 class="lead float-right mr-3">Clicks: <b><span id="number_clicks">{{clicks.clicks}}</span></b></h5>
+        </div>
+    </div>
+{% endblock page_header %}
+{% block content %}
+<div class="continer mt-3 mb-5 ml-3">
+    <div id="gold_mine" class="container d-flex flex-row flex-wrap">
+       
+            {% for box in boxes %}
+                {% if box.id in request.session.values %}
+                    {% if box.name == 'Gold' %}
+                        <div class="card" style="width: 6.5rem; height: 5rem">
+                            <img src="{% static 'gold_app/images/gold.png' %}" style="height:5rem" class="card-img">
+                        </div>
+                    {% elif box.name == 'Diamond' %}
+                        <div class="card" style="width: 6.5rem; height: 5rem">
+                            <img src="{% static 'gold_app/images/diamond.png' %}" style="height:5rem" class="card-img">
+                        </div>
+                    {% elif box.name == 'Bomb' %}
+                        <div class="card" style="width: 6.5rem; height: 5rem">
+                            <img src="{% static 'gold_app/images/bomb.jpg' %}" style="height:5rem" class="card-img">
+                        </div>
+                    {% elif box.name == 'None' %}
+                        <div class="card" style="width: 6.5rem; height: 5rem"></div>
+                    {% endif %}
+
+                {% else %}
+                    {% if clicks.clicks > 0 %}
+                        <a href="{% url 'gold_app:user_select' box.id  %}" data-box="{{box.id}}">
+                            <div class="card" style="width: 6.5rem; height: 5rem">
+                                <img src="{% static 'gold_app/images/soil.jpg' %}" id="{{box.id}}" style="height:5rem" class="card-img">
+                            </div>
+                        </a>
+                    {% else %}
+                        <div class="card" style="width: 6.5rem; height: 5rem">
+                            <img src="{% static 'gold_app/images/soil.jpg' %}" style="height:5rem" class="card-img">
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        
+    </div>
+{% endblock content %}
+{% block script %}
+    <script src="{% static 'gold_app/scripts/user_select.js' %}"></script>
+    <script>
+        var imgGold = "{% static 'gold_app/images/gold.png' %}";
+        var imgDiamond = "{% static 'gold_app/images/diamond.png' %}";
+        var imgBomb = "{% static 'gold_app/images/bomb.jpg' %}";
+    </script>
+{% endblock script %}

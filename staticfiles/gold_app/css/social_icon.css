@@ -1,0 +1,12 @@
+.socialaccount_provider.google{
+    display: none;
+}
+.socialaccount_provider.twitter{
+    display: none;
+}
+ul {
+    list-style-type: none;
+}
+a:hover {
+    text-decoration: none;
+}
