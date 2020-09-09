@@ -15,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'gold_app/css/social_icon.css' %}">
 </head>
 <body oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
-    <!-- oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;" -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'gold_app:index' %}">Gold Mine</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +82,9 @@
         {% endif %}
       </main>
       <script src="{% static 'gold_app/scripts/social_script.js' %}"></script>
+      <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+      </script>
       {% block script %}{% endblock script%}
-      
 </body>
 </html>
