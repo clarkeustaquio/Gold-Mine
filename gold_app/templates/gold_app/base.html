@@ -1,5 +1,8 @@
 {% load bootstrap4 %}
-
+{% load i18n %}
+{% load static %}
+{% load socialaccount %}
+{% load account socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,8 +11,9 @@
     <title>{% block title%}{% endblock title%}</title>
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gold_app/css/social_icon.css' %}">
 </head>
-<body>
+<body oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
     <!-- oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;" -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'gold_app:index' %}">Gold Mine</a>
@@ -36,19 +40,30 @@
               {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
-                </li>
+              </li>
               {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account_login' %}">Sign-in</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account_signup' %}">Sign-up</a>
-                </li>
+              {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}
+                <div class="socialaccount_ballot">
+                    <ul class="socialaccount_providers">
+                        <li class="nav-item">  
+                          <a class="nav-link" id="google_icon" href="">
+                              Sign-in
+                          </a>
+                        </li>
+                        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                    </ul>
+                </div>
+                {% include "socialaccount/snippets/login_extra.html" %}
+                {% else %}
+                  <p class="card-text">{% blocktrans %}If you have not created an account yet, then please
+                  <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+                {% endif %}
+                
               {% endif %}
           </ul>
         </div>
       </nav>
-
 
       <main role="main" class="container">
         {% if user.is_authenticated %}
@@ -57,9 +72,17 @@
           </div>
           {% block content %}{% endblock content %}
         {% else %}
-          Login
+          <div class="jumbotron jumbotron-fluid mt-5">
+            <div class="container">
+              <h1 class="display-4">Gold Mine</h1>
+              <p class="lead ml-2">Please login to play the game.</p>
+
+            </div>
+          </div>
         {% endif %}
       </main>
+      <script src="{% static 'gold_app/scripts/social_script.js' %}"></script>
       {% block script %}{% endblock script%}
+      
 </body>
 </html>

@@ -1,0 +1,1 @@
+web: gunicorn gold_mine.wsgi --log-file -
