@@ -14,7 +14,7 @@ def generate_random():
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('user_select/<int:id>/', views.user_select, name='user_select'),
+    path('user_select/{}<int:id>{}/'.format(generate_random(), generate_random()), views.user_select, name='user_select'),
     path('leaderboard/', views.leader_board, name='leader_board'),
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
